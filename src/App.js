@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Example from "./Example";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const FarContext = React.createContext("fromfar");
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      unMount: false
+    };
+  }
+
+  toggle = () => {
+    this.setState(currState => ({
+      unMount: !currState.unMount
+    }));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        {!this.state.unMount && (
+          <FarContext.Provider value={this.state.unMount}>
+            <Example />
+          </FarContext.Provider>
+        )}
+        <button onClick={this.toggle}>toggle</button>
+      </div>
+    );
+  }
 }
 
 export default App;
