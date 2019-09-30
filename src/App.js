@@ -1,16 +1,23 @@
 import React from "react";
 import "./App.css";
 import Example from "./Example";
+import ExampleClass from "./ExampleClass";
+import FancyInput from "./FancyButton";
 
 export const FarContext = React.createContext("fromfar");
+export const AboveFarContext = React.createContext("abovefromfar");
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      unMount: false
+      unMount: false,
+      contextValue: 0,
+      anotherContext: "a"
     };
+
+    this.myRef = React.createRef();
   }
 
   toggle = () => {
@@ -19,15 +26,28 @@ class App extends React.Component {
     }));
   };
 
+  componentDidMount() {
+    const timeoutId = setTimeout(() => {
+      this.setState({ contextValue: 1 });
+      this.myRef.current.focus();
+
+      clearTimeout(timeoutId);
+    }, 2500);
+  }
+
   render() {
     return (
       <div className="App">
         {!this.state.unMount && (
-          <FarContext.Provider value={this.state.unMount}>
-            <Example />
-          </FarContext.Provider>
+          <AboveFarContext.Provider value={this.state.anotherContext}>
+            <FarContext.Provider value={this.state.contextValue}>
+              <Example initialCount={0} />
+            </FarContext.Provider>
+          </AboveFarContext.Provider>
         )}
         <button onClick={this.toggle}>toggle</button>
+        <ExampleClass />
+        <FancyInput ref={this.myRef} />
       </div>
     );
   }
