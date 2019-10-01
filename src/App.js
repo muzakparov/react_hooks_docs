@@ -38,13 +38,16 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {!this.state.unMount && (
-          <AboveFarContext.Provider value={this.state.anotherContext}>
-            <FarContext.Provider value={this.state.contextValue}>
-              <Example initialCount={0} />
-            </FarContext.Provider>
-          </AboveFarContext.Provider>
-        )}
+        <div>
+          {!this.state.unMount && (
+            <AboveFarContext.Provider value={this.state.anotherContext}>
+              <FarContext.Provider value={this.state.contextValue}>
+                <Example initialCount={0} />
+              </FarContext.Provider>
+            </AboveFarContext.Provider>
+          )}
+        </div>
+
         <div>
           <ExampleClass />
         </div>

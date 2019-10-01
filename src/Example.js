@@ -205,6 +205,7 @@ export default function Example(props) {
       <div style={{ height: height }}>
         <p ref={measuredRef}>AAAAAAAAAAAAA</p>
         <p>Height: {height}</p>
+        <button onClick={() => setHeight(height + 1)}> +</button>
       </div>
     </div>
   );

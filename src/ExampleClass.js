@@ -1,4 +1,5 @@
 import React from "react";
+import { directive } from "@babel/types";
 
 export default class ExampleClass extends React.Component {
   constructor(props) {
@@ -14,6 +15,6 @@ export default class ExampleClass extends React.Component {
   }
 
   render() {
-    return "ExampleClass";
+    return <div>ExampleClass</div>;
   }
 }
