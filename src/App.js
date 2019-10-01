@@ -45,9 +45,17 @@ class App extends React.Component {
             </FarContext.Provider>
           </AboveFarContext.Provider>
         )}
-        <button onClick={this.toggle}>toggle</button>
-        <ExampleClass />
-        <FancyInput ref={this.myRef} />
+        <div>
+          <ExampleClass />
+        </div>
+        <div>
+          <FancyInput ref={this.myRef} />
+        </div>
+
+        <div>
+          {" "}
+          <button onClick={this.toggle}>toggle</button>
+        </div>
       </div>
     );
   }

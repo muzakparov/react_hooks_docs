@@ -13,6 +13,7 @@ import { FarContext } from "./App";
 import useTimer from "./hooks/useTimer";
 import Child from "./Child";
 import ChildPure from "./ChildPure";
+import usePrevious from "./hooks/usePrevious";
 
 export default function Example(props) {
   // Declare a new state variable, which we'll call "count"
@@ -28,7 +29,7 @@ export default function Example(props) {
   });
 
   function updateTitle() {
-    console.log("effect count");
+    console.log("effect count: 1");
     document.title = count;
   }
 
@@ -37,7 +38,7 @@ export default function Example(props) {
   const [timer, setTimer] = useTimer();
 
   useEffect(() => {
-    console.log("empty deps mount");
+    console.log("empty deps mount: 2");
 
     return () => {
       console.log("empty deps unmount");
@@ -45,7 +46,7 @@ export default function Example(props) {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect");
+    console.log("useEffect: 3");
   });
 
   const farContext = useContext(FarContext);
@@ -106,6 +107,46 @@ export default function Example(props) {
     console.log("useLayoutEffect");
   });
 
+  //
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (!firstRender.current) {
+      console.log("only on update: 4");
+    }
+
+    firstRender.current = false;
+  });
+
+  //
+  const prevCountRef = useRef("first time");
+  useEffect(() => {
+    prevCountRef.current = count;
+  });
+  const prevCount = usePrevious(count);
+
+  //
+  function handleAlertClick() {
+    setTimeout(() => {
+      alert("You clicked on: " + count + " " + prevCountRef.current);
+    }, 3000);
+  }
+
+  //
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  function handleForceUpdateClick() {
+    forceUpdate();
+  }
+
+  //
+  const [height, setHeight] = useState(0);
+  const measuredRef = useCallback(node => {
+    console.log("ref callback");
+
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+    }
+  }, []);
+
   console.log("first", farContext, inputEl);
   return (
     <div>
@@ -113,6 +154,9 @@ export default function Example(props) {
       <Child doSomething={memoizedCallback} />
       <p>initialState: {lazyState}</p>
       <p>Count: {count}</p>
+      <p>
+        Count Now: {count}, Before: {prevCount}
+      </p>
       <p>Count correct: {countX}</p>
       <p>Same Count: {sameCount}</p>
       <p>fruit: {fruit}</p>
@@ -148,10 +192,19 @@ export default function Example(props) {
         {" "}
         reset
       </button>
-
       <div>
         <input ref={inputEl} type="text" />
         <button onClick={onButtonClick}>Focus the input</button>
+      </div>
+      <div>
+        <button onClick={handleAlertClick}>Show alert</button>
+      </div>{" "}
+      <div>
+        <button onClick={handleForceUpdateClick}>Force update</button>
+      </div>
+      <div style={{ height: height }}>
+        <p ref={measuredRef}>AAAAAAAAAAAAA</p>
+        <p>Height: {height}</p>
       </div>
     </div>
   );

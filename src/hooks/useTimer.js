@@ -1,7 +1,7 @@
 import { useState, useEffect, useDebugValue } from "react";
 
 export default function useTimer() {
-  useDebugValue("XXXX");
+  useDebugValue("Custom Timer");
   const [timer, setTimer] = useState(3000);
 
   function logTime() {
